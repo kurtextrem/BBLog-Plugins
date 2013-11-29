@@ -1,3 +1,4 @@
+"use strict"
 /**
   * Adds an extended friendlist to the battlelog.
   *

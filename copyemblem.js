@@ -1,3 +1,4 @@
+"use strict"
 /**
 * Copy & load emblems.
 *
@@ -15,7 +16,7 @@ BBLog.handle('add.plugin', {
 	/** @type 	{String}		The extension's name.  		*/
 	name: 'Manage Emblems',
 	/** @type 	{String} 		The version string.		*/
-	version: '1.0.6.3',
+	version: '1.0.6.31',
 	/** @type 	{Object} 		BBL Translation stuff.		*/
 	translations : {
 		"en" : {
@@ -82,7 +83,7 @@ BBLog.handle('add.plugin', {
 	 	count3 = html.find('.user-container .username span').first().length,
 	 	count4 = html.find('.dialog.emblempreview .btn').length
 
-	 	if (count3 === 1 || count4 === 1) {
+	 	if (count3 === 1 || count4 > 0) {
 	 		count3 = html.find('#emblemLibButton').length
 	 		if(count3 === 0 && this.hasSoldier)
 	 			this.addLibButton(!!count4)
