@@ -96,21 +96,23 @@ BBLog.handle('add.plugin', {
 		this.lastUpdate = window.localStorage['extfriends.lastUpdate'] || 0
 		if (($.now() - this.lastUpdate) / 1000 > 120)
 			this.htmlCache = ''
-		this.handler()
-		this.addRefreshButton()
-		this.addAjaxListener()
-		if (this.htmlCache == '') {
-			this.addSeparator()
-			this.addList()
-		}
+		$.fn.ready(function(){
+			this.handler()
+			this.addRefreshButton()
+			this.addAjaxListener()
+			if (this.htmlCache == '') {
+				this.addSeparator()
+				this.addList()
+			}
 
-		var select = $('#comcenter-offline-separator'),
-			string = 'FirstStep111',
-			select2 = $('.main-loggedin-leftcolumn-activity-filter')
-		window.setTimeout(function(){
-			if (select2.find('li:first-of-type').hasClass('selected') && instance.storage('fix.showAll'))
-				select2.find('li:last-of-type').click()
-		}, 1000)
+			var select = $('#comcenter-offline-separator'),
+				string = 'FirstStep111',
+				select2 = $('.main-loggedin-leftcolumn-activity-filter')
+			window.setTimeout(function(){
+				if (select2.find('li:first-of-type').hasClass('selected') && instance.storage('fix.showAll'))
+					select2.find('li:last-of-type').click()
+			}, 1000)
+		})
 
 		if(!instance.storage(string)){
 			BBLog.alert('welcomealert', this.instance.t('firstStepText1')+' v'+this.version, "<strong>"+this.instance.t('firstStepText2')+"</strong><p>"+this.instance.t('firstStepText3')+"</p><p>"+this.instance.t('firstStepText4')+"</p><p>"+this.instance.t('firstStepText5')+"</p><p>"+this.instance.t('firstStepText6')+"</p><p><strong>"+this.instance.t('firstStepText7')+"</strong> "+this.instance.t('firstStepText8')+"</p>", function(){

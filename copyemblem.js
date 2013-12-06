@@ -8,7 +8,6 @@
 * @version	1.0.6.4
 * @date 	2013-11-17
 * @url 	http://kurtextrem.de
-* @license 	CC BY-NC-ND 3.0 http://creativecommons.org/licenses/by-nc-nd/3.0/deed.de
 */
 BBLog.handle('add.plugin', {
 	/** @type 	{String} 		The extension's id. 		*/
