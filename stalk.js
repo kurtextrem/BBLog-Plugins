@@ -249,7 +249,7 @@ BBLog.handle('add.plugin', {
 						playerID = json.globalContext.profileUserId,
 						idle =  idle2 = '',
 						gravatarImg = 'http://www.gravatar.com/avatar/'+profileCommon.user.gravatarMd5+'?s=36&d=http%3A%2F%2Fbattlelog-cdn.battlefield.com%2Fcdnprefix%2Favatar1%2Fpublic%2Fbase%2Fshared%2Fdefault-avatar-36.png'
-					if(typeof profileCommon.user.presence.isAway !== 'undefined') {
+					if(typeof profileCommon.user.presence.isAway !== 'undefined' || typeof profileCommon.user.presence.presenceState === 65537 ) {
 						idle = this.instance.t('away')
 					}
 					if (typeof profileCommon.user.presence.isPlaying !== 'undefined') {
