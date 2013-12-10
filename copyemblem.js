@@ -5,7 +5,7 @@
 * Thanks to cowboy for this gist: https://gist.github.com/cowboy/6815966.
 *
 * @author 	Jacob Groß (Kurtextrem)
-* @version	1.0.6.4
+* @version	1.0.6.5
 * @date 	2013-11-17
 * @url 	http://kurtextrem.de
 */
@@ -78,7 +78,7 @@ BBLog.handle('add.plugin', {
 	 handler: function() {
 	 	var html = $('html'),
 	 	count = html.find('#emblem-edit').length,
-	 	count2,
+	 	count2/*,
 	 	count3 = html.find('.user-container .username span').first().length,
 	 	count4 = html.find('.dialog.emblempreview .btn').length
 
@@ -86,12 +86,12 @@ BBLog.handle('add.plugin', {
 	 		count3 = html.find('#emblemLibButton').length
 	 		if(count3 === 0 && this.hasSoldier)
 	 			this.addLibButton(!!count4)
-	 	}
+	 	}*/
 	 	if(count === 1) {
 	 		count = html.find('#emblem-copy-btn').length
 	 		count2 = html.find('#emblem-load-btn').length
-	 		if(count === 0)
-	 			this.addButton('copy')
+	 		//if(count === 0)
+	 		//	this.addButton('copy')
 	 		if (count2 === 0)
 	 			this.addButton('load')
 	 	}
