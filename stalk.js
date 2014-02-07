@@ -338,7 +338,7 @@ BBLog.handle('add.plugin', {
 			}
 			// data-tooltip="Warning: you're about to change the Battlelog, because the soldier is playing another BF version." data-tooltip-position="left"
 			idle2 = '<div class="comcenter-username-serverinfo origin-game-title"><span class="common-gameicon-hori bright common-game-'+game+'-'+platform+' comcenter-game-icon"></span><span class="common-playing-link" data-track="friend.playing.server.link"><a title="'+serverName+'" class="common-playing-link comcenter-playing-link" href="'+serverLink+'">'+serverName+'</a></span></div>'
-			if (game >= 2048)
+			if (game === 2048)
 				add = ' btn-primary'
 			playing = '<button class="btn btn-small join-friend-submit-link join-friend join-friendcomcenter-interact-playing'+add+'" data-bind-action="join-mp-gameserver" data-role="1" data-guid="'+guid+'" data-game="'+game+'" data-platform="1" data-friendpersonaid="'+friendPersonaId+'" data-track="friend.playing.server.join"><i class="icon-join-friend"></i></button></div>' // role = 1 = play, 4 = obs
 		}
