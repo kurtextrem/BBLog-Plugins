@@ -1,12 +1,12 @@
-"use strict"
+'use strict';
 /**
   * Adds an extended friendlist to the battlelog.
   *
   * Thanks to Pun1a for some basic code.
   *
   * @author 	Kurtextrem
-  * @version	1.3.20
-  * @date 	2013-10-29
+  * @version	1.3.21
+  * @date 	2014-02-16
   * @url 	http://kurtextrem.de
   * @license 	CC BY-NC-ND 3.0 http://creativecommons.org/licenses/by-nc-nd/3.0/deed.de
   */
@@ -16,7 +16,7 @@ BBLog.handle('add.plugin', {
 	/** @type 	{String}		The extension's name.  		*/
 	name: 'Extended Friendlist',
 	/** @type 	{String} 		The version string.		*/
-	version: '1.3.20',
+	version: '1.3.21',
 	/** @type 	{Object} 		BBL Translation stuff.		*/
 	translations : {
 	    	"en" : {
@@ -96,26 +96,24 @@ BBLog.handle('add.plugin', {
 		this.lastUpdate = window.localStorage['extfriends.lastUpdate'] || 0
 		if (($.now() - this.lastUpdate) / 1000 > 120)
 			this.htmlCache = ''
-		$.fn.ready(function(){
-			this.handler()
-			this.addRefreshButton()
-			this.addAjaxListener()
-			if (this.htmlCache == '') {
-				this.addSeparator()
-				this.addList()
-			}
+		this.handler()
+		this.addRefreshButton()
+		this.addAjaxListener()
+		if (this.htmlCache == '') {
+			this.addSeparator()
+			this.addList()
+		}
 
-			var select = $('#comcenter-offline-separator'),
-				string = 'FirstStep111',
-				select2 = $('.main-loggedin-leftcolumn-activity-filter')
-			window.setTimeout(function(){
-				if (select2.find('li:first-of-type').hasClass('selected') && instance.storage('fix.showAll'))
-					select2.find('li:last-of-type').click()
-			}, 1000)
-		})
+		var select = $('#comcenter-offline-separator'),
+			string = 'FirstStep111',
+			select2 = $('.main-loggedin-leftcolumn-activity-filter')
+		window.setTimeout(function() {
+			if (select2.find('li:first-of-type').hasClass('selected') && instance.storage('fix.showAll'))
+				select2.find('li:last-of-type').click()
+		}, 1000)
 
-		if(!instance.storage(string)){
-			BBLog.alert('welcomealert', this.instance.t('firstStepText1')+' v'+this.version, "<strong>"+this.instance.t('firstStepText2')+"</strong><p>"+this.instance.t('firstStepText3')+"</p><p>"+this.instance.t('firstStepText4')+"</p><p>"+this.instance.t('firstStepText5')+"</p><p>"+this.instance.t('firstStepText6')+"</p><p><strong>"+this.instance.t('firstStepText7')+"</strong> "+this.instance.t('firstStepText8')+"</p>", function(){
+		if (!instance.storage(string)){
+			this.alert('welcomealert', this.instance.t('firstStepText1')+' v'+this.version, "<strong>"+this.instance.t('firstStepText2')+"</strong><p>"+this.instance.t('firstStepText3')+"</p><p>"+this.instance.t('firstStepText4')+"</p><p>"+this.instance.t('firstStepText5')+"</p><p>"+this.instance.t('firstStepText6')+"</p><p><strong>"+this.instance.t('firstStepText7')+"</strong> "+this.instance.t('firstStepText8')+"</p>", function(){
 				instance.storage(string, true);
 			})
 		}
@@ -247,7 +245,8 @@ BBLog.handle('add.plugin', {
 						return
 					var profileCommon = json.context.profileCommon,
 						playerID = json.globalContext.profileUserId,
-						idle =  idle2 = '',
+						idle2 = '',
+						idle = '',
 						gravatarImg = 'http://www.gravatar.com/avatar/'+profileCommon.user.gravatarMd5+'?s=36&d=http%3A%2F%2Fbattlelog-cdn.battlefield.com%2Fcdnprefix%2Favatar1%2Fpublic%2Fbase%2Fshared%2Fdefault-avatar-36.png'
 					if(typeof profileCommon.user.presence.isAway !== 'undefined' || typeof profileCommon.user.presence.presenceState === 65537 ) {
 						idle = this.instance.t('away')
@@ -311,7 +310,7 @@ BBLog.handle('add.plugin', {
 	 */
 	buildTemplate: function(playerName, playerID, profileLink, background, idle, extra, playing, game, platform, serverName, serverLink, guid, friendPersonaId) {
 		// presenceState:2/3 = mobile<span class="icon-mobile icon-grey"></span> used in the interact container
-		var button, playerhtml = idle2 = class1 = add = '', class2 = 'online'
+		var button = '', playerhtml = '', idle2 =  '', class1 = '', add = '', class2 = 'online'
 		if (typeof playerID === 'undefined') {
 			playerID = $.now()
 			profileLink = '#'
@@ -455,7 +454,7 @@ BBLog.handle('add.plugin', {
 		}
 		html += '</table>'
 
-		BBLog.alert('friendsalert', this.instance.t('firstStepText1')+' v'+this.version, html, function(){
+		this.alert('friendsalert', this.instance.t('firstStepText1')+' v'+this.version, html, function(){
 			$('#extFLRefresh').click()
 		})
 		$popup = $('#popup-friendsalert')
@@ -500,5 +499,21 @@ BBLog.handle('add.plugin', {
 	 */
 	isOptedOut: function(name) {
 		return this.optedOut.indexOf(name) !== -1
+	},
+
+	alert: function (id, title, text, callback) {
+		var footer = $('<div class="popup-prompt-buttons"><div style="text-align:right"><input type="button" class="ok-btn base-button-arrow-small popup-prompt-button-continue" value="' + BBLog.t('ok') + '"/><div class="base-clear"></div></div>')
+		if (!callback)
+			callback = function () {}
+		text = '<div>' + text + '</div>'
+		footer.find('.common-popup-close-button').on('click', function () {
+			callback(null)
+			BBLog.closeAllPopups()
+		})
+		footer.find('.ok-btn').on('click', function () {
+			callback(true)
+			BBLog.closeAllPopups()
+		})
+		BBLog.popup(id, title, text, footer)
 	}
 })
