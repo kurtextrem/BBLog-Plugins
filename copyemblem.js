@@ -177,7 +177,7 @@ BBLog.handle('add.plugin', {
 		if (this.instance.storage('add.emblem'))
 			$dropdown.append('<a href="/bf4/' + lang + 'emblem/edit/active/' + matches[2] + '/1/"><i class="icon-white icon-servers"></i> <span>Emblem</span></a>')
 		if (this.instance.storage('add.dogtags'))
-			$dropdown.append('<a href="/bf4/' + lang + 'soldier/' + name + '/dogtags/' + matches[2] + '/' + matches[3] + '/"><i class="icon-white icon-dogtags"></i> Dog Tags</a>')
+			$('.dropdown-content[data-for=stats] > .row > .dropdown-menu:last-of-type').append('<a href="/bf4/' + lang + 'soldier/' + name + '/dogtags/' + matches[2] + '/' + matches[3] + '/"><i class="icon-white icon-dogtags"></i> Dog Tags</a>')
 	},
 	/**
 	 * Registers a clicks again for the Surce ajax Navigation thing.

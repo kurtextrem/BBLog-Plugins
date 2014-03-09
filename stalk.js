@@ -5,7 +5,7 @@
   * Thanks to Pun1a for some basic code.
   *
   * @author 	Kurtextrem
-  * @version	1.3.21
+  * @version	1.3.22
   * @date 	2014-02-16
   * @url 	http://kurtextrem.de
   * @license 	CC BY-NC-ND 3.0 http://creativecommons.org/licenses/by-nc-nd/3.0/deed.de
@@ -16,7 +16,7 @@ BBLog.handle('add.plugin', {
 	/** @type 	{String}		The extension's name.  		*/
 	name: 'Extended Friendlist',
 	/** @type 	{String} 		The version string.		*/
-	version: '1.3.21',
+	version: '1.3.22',
 	/** @type 	{Object} 		BBL Translation stuff.		*/
 	translations : {
 	    	"en" : {
@@ -58,7 +58,27 @@ BBLog.handle('add.plugin', {
 	    		"away": "Abwesend",
 	    		"remove": "Entfernen!",
 	    		"unknown": "Unbekannt."
-	    	}
+	    	},
+	    	"pt" : {
+	    		"fix.exp" : "Ajuste do Banner Evendo de Experiência Dobrada",
+	    		"fix.exp.tooltip" : "Ajusta o Banner Evento de Experiência Dobrada para melhor paginação.",
+	    		"fix.showAll": "Mostrar 'TUDO' na janela de Atividade de Jogo.",
+	    		"firstStepText1": "Informação da Lista Estendida de Amigos",
+	    		"firstStepText2": "Bem-vindo!",
+	    		"firstStepText3": "Para adicionar amigos à sua lista estendida acesse o perfil requerido e clique em 'Ad. à lista estendida'.",
+	    		"firstStepText4": "A lista estendida é mostrada abaixo da lista de amigos offline.",
+	    		"firstStepText5": "Se desejar atualizar a lista pressione o botão "Atualizar" próximo à caixa de procura",
+	    		"firstStepText6": "Por favor, reporte erros no Fórum do BBLog",
+	    		"firstStepText7": "O que há de novo:",
+	    		"firstStepText8": "Ajuste ao novo Battlelog ao mostrar nome errados na lista estendida.",
+	    		"buttonTooltip": "Adicione este soldado à lista estendida",
+	    		"buttonRemoveTooltip": "Remover este soldado da lista estendida",
+	    		"refreshTooltip": "Última Atualização:",
+	    		"showFriends": "Mostrar Amigos",
+	    		"away": "Ocupado",
+	    		"remove": "Remover!",
+	    		"unknown": "Desconhecido."
+	    	},
 	 },
 	 /** @type 	{Object} 		Config flags from BBL.		*/
 	configFlags : [
@@ -239,9 +259,9 @@ BBLog.handle('add.plugin', {
 				type: 'GET',
 				headers: {'X-AjaxNavigation': 1},
 				success: function(json) {
-					if (typeof json.context.profileCommon === 'undefined')
+					if (!json || !json.context || typeof json.context.profileCommon === 'undefined')
 						return this.buildTemplate(playerName)
-					if (typeof json.context.profileCommon.user.presence.isOnline === 'undefined')
+					if (!json.context.profileCommon.user.presence.isOnline)
 						return
 					var profileCommon = json.context.profileCommon,
 						playerID = json.globalContext.profileUserId,
