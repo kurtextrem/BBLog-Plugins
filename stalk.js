@@ -18,7 +18,7 @@
 		/** @type 	{String}		The extension's name.  		*/
 		name: 'Extended Friendlist',
 		/** @type 	{String} 		The version string.		*/
-		version: '1.3.22',
+		version: '1.3.23',
 		/** @type 	{Object} 		BBL Translation stuff.		*/
 		translations : {
 			"en" : {
