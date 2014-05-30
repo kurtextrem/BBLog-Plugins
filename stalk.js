@@ -6,13 +6,13 @@
   * @author 	Kurtextrem
   * @version	1.3.23
   * @date 	2014-05-28
-  * @url 		http://kurtextrem.de
+  * @url		http://kurtextrem.de
   * @license 	CC BY-NC-ND 3.0 http://creativecommons.org/licenses/by-nc-nd/3.0/deed.de
   */
-  +function($, BBLog) {
+  $.fn.ready(function() {
 	'use strict';
 
-	BBLog.handle('add.plugin', {
+	var plugin = {
 		/** @type 	{String} 		The extension's id. 		*/
 		id: 'extended-friends-plugin',
 		/** @type 	{String}		The extension's name.  		*/
@@ -84,9 +84,9 @@
 		},
 		/** @type 	{Object} 		Config flags from BBL.		*/
 		configFlags : [
-			["fix.exp", 1],
-			["fix.showAll", 1],
-			["showFriends", 1, function(instance) {
+			['fix.exp', 1],
+			['fix.showAll', 1],
+			['showFriends', 1, function(instance) {
 				instance.showFriends()
 			}]
 		],
@@ -118,22 +118,25 @@
 			this.extendedFriends = this.instance.storage('plugin.extendedfriends') || []
 			this.htmlCache = window.localStorage['extfriends.htmlCache'] || ''
 			this.lastUpdate = window.localStorage['extfriends.lastUpdate'] || 0
+			if (this.languageAddition !== window.localStorage['extfriends.languageAddition']) {
+				this.lastUpdate = 0
+				window.localStorage['extfriends.languageAddition'] = this.languageAddition
+			}
 			if (($.now() - this.lastUpdate) / 1000 > 120)
 				this.htmlCache = ''
 			this.handler()
 			this.addRefreshButton()
 			this.addAjaxListener()
-			if (this.htmlCache == '') {
+			if (this.htmlCache === '') {
 				this.addSeparator()
 				this.addList()
 			}
 
-			var select = $('#comcenter-offline-separator'),
-			string = 'FirstStep111',
-			select2 = $('.main-loggedin-leftcolumn-activity-filter')
+			var string = 'FirstStep111',
+			select = $('.main-loggedin-leftcolumn-activity-filter')
 			window.setTimeout(function() {
-				if (select2.find('li:first-of-type').hasClass('selected') && instance.storage('fix.showAll'))
-					select2.find('li:last-of-type').click()
+				if (select.find('li:first-of-type').hasClass('selected') && instance.storage('fix.showAll'))
+					select.find('li:last-of-type').click()
 			}, 1000)
 
 			if (!instance.storage(string)){
@@ -163,9 +166,9 @@
 			select = BBLog.cache('mode') === 'bf4' ?  '.user-container .username span' : '.username > h1',
 			count = html.find(select).first().length,
 			list = html.find('#comcenter-extfl-separator').length
-			if(count === 1) {
+			if (count === 1) {
 				count = html.find('#extendedFriendsButton').length
-				if(count === 0)
+				if (count === 0)
 					this.addButton()
 			}
 			if (list === 0) {
@@ -261,7 +264,7 @@
 				profileLink = this.languageAddition + '/bf' + (BBLog.cache('mode') === 'bf4' ? '4' : '3') + '/user/' + playerName
 				$.ajax(profileLink, {
 					type: 'GET',
-					headers: {'X-AjaxNavigation': 1},
+					headers: {'X-AjaxNavigation': 1, 'X-Requested-with': 'xmlhttprequest'},
 					success: function(json) {
 						if (!json || !json.context || typeof json.context.profileCommon === 'undefined')
 							return this.buildTemplate(playerName)
@@ -269,10 +272,9 @@
 							return
 						var profileCommon = json.context.profileCommon,
 						playerID = json.globalContext.profileUserId,
-						idle2 = '',
 						idle = '',
 						gravatarImg = 'http://www.gravatar.com/avatar/'+profileCommon.user.gravatarMd5+'?s=36&d=http%3A%2F%2Fbattlelog-cdn.battlefield.com%2Fcdnprefix%2Favatar1%2Fpublic%2Fbase%2Fshared%2Fdefault-avatar-36.png'
-						if(typeof profileCommon.user.presence.isAway !== 'undefined' || typeof profileCommon.user.presence.presenceState === 65537 ) {
+						if (typeof profileCommon.user.presence.isAway !== 'undefined' || typeof profileCommon.user.presence.presenceState === 65537 ) {
 							idle = this.instance.t('away')
 						}
 						if (typeof profileCommon.user.presence.isPlaying !== 'undefined') {
@@ -280,7 +282,7 @@
 								var guid = profileCommon.user.presence.playingMp.serverGuid,
 								serverName = profileCommon.user.presence.playingMp.serverName,
 								game = profileCommon.user.presence.playingMp.game,
-								serverLink = this.languageAddition + '/bf' + (game === 2048 ? '4' : '3') +'/servers/show/pc/'+guid+'/', //if (profileCommon.user.presence.playingMp.platform === 1)
+								serverLink = this.languageAddition + '/bf' + (game === 2048 ? '4' : '3')  + '/servers/show/pc/' + guid + '/', //if (profileCommon.user.presence.playingMp.platform === 1)
 								platform = profileCommon.user.presence.playingMp.platform,
 								friendPersonaId = profileCommon.user.presence.playingMp.personalId
 
@@ -292,9 +294,9 @@
 					error: function() {
 						this.buildTemplate(playerName)
 					}.bind(this)
-				}).done(function(){
-					if (i === length-1)
-						window.setTimeout(function(){
+				}).done(function() {
+					if (i === length - 1)
+						window.setTimeout(function() {
 							this.updating = false
 							this.spinner(false)
 							this.lastUpdate = $.now()
@@ -305,7 +307,7 @@
 				}.bind(this))
 			}.bind(this))
 
-			$(document).on('click', '.removeExtFl', function(e){
+			$(document).on('click', '.removeExtFl', function(e) {
 				var $target = $(e.target)
 				$target.parents('.comcenter-friend').fadeOut(5000)
 				this.toggleName($target.data('nick'), true)
@@ -345,9 +347,9 @@
 			if (typeof playing === 'undefined')
 				playing = ''
 			if (idle) {
-				idle2 = '<div class="comcenter-username-away">'+idle+'</div>'
+				idle2 = '<div class="comcenter-username-away">' + idle + '</div>'
 				if (button)
-					idle2 = '<div class="comcenter-username-away"><span class="bblog-button tiny removeExtFl" data-nick="'+playerName+'">'+idle+'</span></div>'
+					idle2 = '<div class="comcenter-username-away"><span class="bblog-button tiny removeExtFl" data-nick="' + playerName + '">' + idle + '</span></div>'
 				idle = ' comcenter-username-idle'
 			}
 			if (playing) {
@@ -366,7 +368,7 @@
 			}
 			if (typeof extra === 'undefined')
 				extra = ''
-			playerhtml = '<surf:container id="comcenter-surface-friends_'+playerID+'" class="extFLFriend"><li id="comcenter-'+playerID+'" class="comcenter-friend-item comcenter-friend comcenter-friend-online'+class1+'" rel="'+	playerID+'"'+extra+'><div class="comcenter-avatar"><a href="'+profileLink+'"><i class="avatar medium '+class2+'" style="background-image:url('+background+')"></i></a></div><div class="comcenter-usernam	e'	+idle+'"><a class="comcenter-username-link" href="'+profileLink+'">'+unescape(playerName)+'</a>'+idle2+'</div><div class="comcenter-interact-container">'+playing+'</li></surf:container>'
+			playerhtml = '<surf:container id="comcenter-surface-friends_'+playerID+'" class="extFLFriend"><li id="comcenter-'+playerID+'" class="comcenter-friend-item comcenter-friend comcenter-friend-online'+class1+'" rel="'+	playerID+'"'+extra+'><div class="comcenter-avatar"><a href="'+profileLink+'"><i class="avatar medium '+class2+'" style="background-image:url('+background+')"></i></a></div><div class="comcenter-username'+idle+'"><a class="comcenter-username-link" href="'+profileLink+'">'+unescape(playerName)+'</a>'+idle2+'</div><div class="comcenter-interact-container">'+playing+'</li></surf:container>'
 			if (playing !== '')
 				return this.addHTML('.extFlPlaying', playerhtml)
 			return this.addHTML('.extFlOnline', playerhtml) // #comcenter-extfl-separator
@@ -381,13 +383,13 @@
 		* @param  	{bool}	after	Whether it is appended or added after.
 		*/
 		addHTML: function(elem, html, after) {
-			var elem = $(elem)
+			elem = $(elem)
 			if (after)
 				elem.after(html)
 			else
 				elem.append(html)
 
-			var html = $('.extFlOnline').parent().html()
+			html = $('.extFlOnline').parent().html()
 			if (html === null)
 				return this.refresh()
 			html = '<div>'+html+'</div>'
@@ -464,7 +466,7 @@
 			$popup
 
 			html += '<table style="border:0;width:50%;margin:auto">'
-			for(var i = 0; i < length; i++) {
+			for (var i = 0; i < length; i++) {
 				html += '<tr>'
 				player = this.extendedFriends[i]
 				html += '<td>'
@@ -477,7 +479,7 @@
 			}
 			html += '</table>'
 
-			this.alert('friendsalert', this.instance.t('firstStepText1')+' v'+this.version, html, function(){
+			this.alert('friendsalert', this.instance.t('firstStepText1') + ' v' + this.version, html, function() {
 				$('#extFLRefresh').click()
 			})
 			$popup = $('#popup-friendsalert')
@@ -485,7 +487,7 @@
 				overflow: 'auto',
 				height: '382px'
 			})
-			$popup.find('td > span').click(function(e){
+			$popup.find('td > span').click(function(e) {
 				var $target = $(e.target)
 				$target.parents('tr').fadeOut(5000)
 				this.toggleName($target.data('nick'), true)
@@ -507,7 +509,7 @@
 		 * @date   	2013-09-05
 		 */
 		 addAjaxListener: function() {
-			$(document).on('click', '#popup-friendsalert a, .extFLFriend a', function(e){
+			$(document).on('click', '#popup-friendsalert a, .extFLFriend a', function(e) {
 				Surface.ajaxNavigation.navigateTo($(this).attr('href'))
 				e.preventDefault()
 			})
@@ -539,5 +541,8 @@
 			})
 			BBLog.popup(id, title, text, footer)
 		 }
-	})
-}(jQuery, BBlog);
+	}
+	window.setTimeout(function() {
+		BBLog.handle('add.plugin', plugin)
+	}, 1000)
+})
